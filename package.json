@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose",
+    "start": "node index.js",
     "mongoService": "service mongodb start"
   },
-  "author": "Sanne, Jade, Viktor, Leander",
+  "author": "lthoedt",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.0",
