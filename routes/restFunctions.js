@@ -71,7 +71,7 @@ const usernameIsValid = (username) => {
 }
 
 const currentSong = async () => {
-	return (await axios.get(URIs.playing)).data.data[0]
+	return (await axios.get(URIs.playing)).data.data.radio_track_plays.data[0].radio_tracks
 }
 
 const upcomingSongs = async () => {
@@ -83,7 +83,7 @@ const upcomingSongs = async () => {
 	//search for the current song index in the 2000list
 	let currentIndex;
 	for (const [index,song] of songs.entries()) {
-		if (playing.id===song.aid) {
+		if (playing.id===song.id) {
 			currentIndex = index;
 			break;
 		}
@@ -107,14 +107,14 @@ const upcomingSongs = async () => {
 
 const remindersPatch = async (username, reminders) => {
 	reminders = reminders.map(song=>{
-		return song.aid;
+		return song.id;
 	})
 
 	const user = await userGet(username);
 
 	const newReminders = user.reminders.map( rem => {
 		for ( const toChange of reminders) {
-			if (rem.aid===toChange) {
+			if (rem.id===toChange) {
 				rem.reminded = true;
 				break;
 			}

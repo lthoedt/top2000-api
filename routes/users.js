@@ -126,7 +126,7 @@ router.delete('/:USERNAME/reminders', async (req, res) => {
 
 		const newReminders = user.reminders.filter( rem => {
 			for ( const toRemove of reminders) {
-				if (rem.aid===toRemove) {
+				if (rem.id===toRemove) {
 					return false;
 				}
 			}
@@ -179,7 +179,7 @@ router.get('/:USERNAME/reminders/songs', async (req, res) => {
 
 		const songs = allSongs.filter(song => {
 			for ( const reminder of reminders ) {
-				if (reminder.aid===song.aid) {
+				if (reminder.id===song.id) {
 					return true;
 				}
 			}

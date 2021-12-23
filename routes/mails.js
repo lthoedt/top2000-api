@@ -49,14 +49,14 @@ router.get('/send', async (req, res) => {
 		users.forEach( user => {
 			for ( const reminder of user.reminders ) {
 				for ( const upc of upcoming ) {
-					if (reminder.aid == upc.aid) {
+					if (reminder.id == upc.id) {
 						// already reminded so break;
 						if (reminder.reminded===true)break;
 						// new song gets created in toSend
-						if (toSend[upc.aid]===undefined) toSend[upc.aid] = {song: null, users: []};
-						toSend[upc.aid].song = upc;
+						if (toSend[upc.id]===undefined) toSend[upc.id] = {song: null, users: []};
+						toSend[upc.id].song = upc;
 						// push the current user into the toSend array
-						toSend[upc.aid].users.push(user);
+						toSend[upc.id].users.push(user);
 						break;
 					}
 				}
@@ -68,7 +68,7 @@ router.get('/send', async (req, res) => {
 				for (const user of song.users) {
 					await remindersPatch(user.username, upcoming);
 				}
-				sendEmail(song.users, song.song);
+				sendEmail(song.users, song.titleong);
 			})
 		}
 		
@@ -95,8 +95,8 @@ const sendEmail = async (to, song) => {
 
 	let htmlEmail = await readFile(path.join('./mail.html'), 'utf8');
 
-	const songTitle = song.s;
-	const songArtist = song.a;
+	const songTitle = song.title;
+	const songArtist = song.artist;
 	const songCover = song.img;
 
 	htmlEmail = htmlEmail.replace(/SONG_TITLE/gi, songTitle)
