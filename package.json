@@ -20,7 +20,8 @@
     "mongod": "^2.0.0",
     "mongodb": "^3.6.3",
     "mongoose": "^5.10.15",
-    "nodemailer": "^6.4.17"
+    "nodemailer": "^6.4.17",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "cors": "^2.8.5",
