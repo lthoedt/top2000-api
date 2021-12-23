@@ -45,8 +45,6 @@ router.get('/playing', async (req, res) => {
         playing.title = playing.name;
         delete playing.name;
 
-        console.log(playing);
-
         res.status(200).json({
             success: true,
             song: playing
