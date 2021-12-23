@@ -17,7 +17,7 @@ const users_schema = new Schema({
 		required: true
 	},
 	reminders: [{
-		aid: {
+		id: {
 			type: String
 		},
 		reminded: {

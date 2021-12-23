@@ -114,7 +114,7 @@ const remindersPatch = async (username, reminders) => {
 
 	const newReminders = user.reminders.map( rem => {
 		for ( const toChange of reminders) {
-			if (rem.id===toChange) {
+			if (rem.id===toChange.id) {
 				rem.reminded = true;
 				break;
 			}
