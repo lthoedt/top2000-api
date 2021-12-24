@@ -43,7 +43,7 @@ const getUsers = () => {
     });
 }
 
-const getSongs = async (search = "", min, max) => {
+const getSongs = async (search = "", min=0, max=2000) => {
     cacheSongs();
 
     if (search == "") return await Songs.find({
