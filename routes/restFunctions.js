@@ -64,9 +64,7 @@ const getSongs = async (search = "", min=0, max=2000) => {
         query.push({ position: Number(search) });
     }
 
-    let songs = await Songs.find({ $or: query });
-
-    return songs;
+    return await Songs.find({ $or: query });
 }
 
 const cacheSongs = async () => {
@@ -118,7 +116,7 @@ const upcomingSongs = async () => {
     //search for the current song index in the 2000list
     let currentIndex;
     for (const [index, song] of songs.entries()) {
-        if (playing.id === song.id) {
+        if (playing.artist === song.artist && playing.name === song.title) {
             currentIndex = index;
             break;
         }
