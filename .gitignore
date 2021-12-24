@@ -3,3 +3,4 @@
 # /database/config.js
 package-lock.json
 .env
+.vscode/launch.json
