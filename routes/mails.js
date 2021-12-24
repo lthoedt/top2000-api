@@ -41,7 +41,7 @@ router.get('/send', async (req, res) => {
 
         const upcoming = await upcomingSongs();
 
-        const toSend = [];
+        const toSend = {};
 
         users.forEach(user => {
             for (const reminder of user.reminders) {
@@ -52,6 +52,7 @@ router.get('/send', async (req, res) => {
                         // new song gets created in toSend
                         if (toSend[upc.id] === undefined) toSend[upc.id] = { song: null, users: [] };
                         toSend[upc.id].song = upc;
+                        console.log(toSend);
                         // push the current user into the toSend array
                         toSend[upc.id].users.push(user);
                         break;
@@ -62,15 +63,13 @@ router.get('/send', async (req, res) => {
 
         let totalMailsSend = 0;
 
-        if (toSend.length !== 0) {
-            toSend.forEach(async song => {
-                for (const user of song.users) {
-                    await remindersPatch(user.username, upcoming);
-                }
-                sendEmail(song.users, song.song);
-                totalMailsSend++;
-            })
-        }
+        Object.values(toSend).forEach(async song => {
+            for (const user of song.users) {
+                await remindersPatch(user.username, upcoming);
+            }
+            sendEmail(song.users, song.song);
+            totalMailsSend++;
+        })
 
         res.status(200).json({
             success: true,
@@ -84,7 +83,7 @@ router.get('/send', async (req, res) => {
 
 router.get('/test', async (req, res) => {
     try {
-        sendEmail([{email: "lthoedt@gmail.com"}], {title: "test", artist: "test", imageUrl: "https://static.vecteezy.com/packs/media/components/global/search-explore-nav/img/vectors/term-bg-1-666de2d941529c25aa511dc18d727160.jpg"});
+        sendEmail([{ email: "lthoedt@gmail.com" }], { title: "test", artist: "test", imageUrl: "https://static.vecteezy.com/packs/media/components/global/search-explore-nav/img/vectors/term-bg-1-666de2d941529c25aa511dc18d727160.jpg" });
 
         res.status(200).json({
             success: true,

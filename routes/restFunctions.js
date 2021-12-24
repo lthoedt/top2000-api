@@ -34,13 +34,13 @@ const sendStatus = (res, status, message) => {
     return res.status(status).json(response);
 }
 
-const getUsers = () => {
-    return Users.find({}, {
+const getUsers = async () => {
+    return await Users.find({}, {
         _id: 0,
         username: 1,
         email: 1,
         reminders: 1
-    });
+    }).lean().exec();
 }
 
 const getSongs = async (search = "", min = 0, max = 2000) => {
@@ -51,7 +51,7 @@ const getSongs = async (search = "", min = 0, max = 2000) => {
             { position: { $gte: min } },
             { position: { $lte: max } }
         ]
-    });
+    }).lean().exec();
 
     let searchNumber = Number(search);
 
@@ -64,7 +64,7 @@ const getSongs = async (search = "", min = 0, max = 2000) => {
         query.push({ position: Number(search) });
     }
 
-    return await Songs.find({ $or: query });
+    return await Songs.find({ $or: query }).lean().exec();
 }
 
 const cacheSongs = async () => {
@@ -114,7 +114,7 @@ const currentSong = async () => {
     playing.title = playing.name;
     delete playing.name;
 
-    const song = await Songs.findOne({ title: playing.title, artist: playing.artist });
+    const song = await Songs.findOne({ title: playing.title, artist: playing.artist }).lean().exec();
 
     return (song === null) ? playing : song;
 }
