@@ -21,15 +21,9 @@ router.get('/', async (req, res) => {
     const search = (reqSearch === undefined || reqSearch.length === 0) ? undefined : String(reqSearch);
 
     try {
-        let songs = await getSongs();
+        let songs = await getSongs(search, limit);
 
-        if (search !== undefined) {
-            songs = songs.filter((song) => {
-                return (song.title.toLowerCase()).includes(search) || (song.artist.toLowerCase()).includes(search) || song.pos == search;
-            })
-        }
-
-        res.json({ success: true, queryCount: songs.length, songs: (limit) ? songs.splice(0, limit) : songs });
+        res.json({ success: true, queryCount: songs.length, songs: songs });
     } catch (err) {
         console.log(err);
         sendStatus(res, 500, err);
