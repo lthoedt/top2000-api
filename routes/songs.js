@@ -37,11 +37,6 @@ router.get('/playing', async (req, res) => {
     try {
         const playing = await currentSong();
 
-        if (playing.cover_url === undefined) playing.image = "https://zwaremetalen.com/wp-content/uploads/2018/12/46479585_10155986290592215_2147690592409223168_n.png";
-
-        playing.title = playing.name;
-        delete playing.name;
-
         res.status(200).json({
             success: true,
             song: playing

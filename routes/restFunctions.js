@@ -43,7 +43,7 @@ const getUsers = () => {
     });
 }
 
-const getSongs = async (search = "", min=0, max=2000) => {
+const getSongs = async (search = "", min = 0, max = 2000) => {
     cacheSongs();
 
     if (search == "") return await Songs.find({
@@ -104,28 +104,32 @@ const usernameIsValid = (username) => {
 }
 
 const currentSong = async () => {
-    return (await axios.get(URIs.playing)).data.data.radio_track_plays.data[0].radio_tracks
+    const playing = (await axios.get(URIs.playing)).data.data.radio_track_plays.data[0].radio_tracks;
+
+    playing.imageUrl = playing.cover_url;
+    delete playing.cover_url;
+
+    if (playing.imageUrl === undefined) playing.imageUrl = "https://zwaremetalen.com/wp-content/uploads/2018/12/46479585_10155986290592215_2147690592409223168_n.png";
+
+    playing.title = playing.name;
+    delete playing.name;
+
+    const song = await Songs.findOne({ title: playing.title, artist: playing.artist });
+
+    return (song === null) ? playing : song;
 }
 
 const upcomingSongs = async () => {
     const songs = await getSongs();
     const playing = await currentSong();
 
+    if (playing.id === undefined) return [];
+
     let upcoming = [];
 
-    //search for the current song index in the 2000list
-    let currentIndex;
-    for (const [index, song] of songs.entries()) {
-        if (playing.artist === song.artist && playing.name === song.title) {
-            currentIndex = index;
-            break;
-        }
-    }
+    let currentIndex = playing.position - 1;
 
     // currentIndex = 9;
-
-    // return empty array if the currentsong isnt in the 2000list
-    if (currentIndex === undefined) return upcoming;
 
     // push the current song in at [0]
     // then add 4 songs that are after it at [1] [2]
@@ -139,10 +143,6 @@ const upcomingSongs = async () => {
 }
 
 const remindersPatch = async (username, reminders) => {
-    reminders = reminders.map(song => {
-        return song.id;
-    })
-
     const user = await userGet(username);
 
     const newReminders = user.reminders.map(rem => {
@@ -153,11 +153,11 @@ const remindersPatch = async (username, reminders) => {
             }
         }
         return rem;
-    })
+    });
 
-    const result = (await Users.updateOne({ username: username }, {
+    await Users.updateOne({ username: username }, {
         reminders: newReminders
-    }))
+    });
 }
 
 module.exports = {
