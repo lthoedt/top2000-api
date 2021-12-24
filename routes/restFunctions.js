@@ -43,10 +43,15 @@ const getUsers = () => {
     });
 }
 
-const getSongs = async (search="", limit=undefined) => {
+const getSongs = async (search = "", min, max) => {
     cacheSongs();
 
-    if (search == "") return await Songs.find().limit(Number(limit));
+    if (search == "") return await Songs.find({
+        $and: [
+            { position: { $gte: min } },
+            { position: { $lte: max } }
+        ]
+    });
 
     let searchNumber = Number(search);
 

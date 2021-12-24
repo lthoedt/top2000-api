@@ -14,14 +14,17 @@ const URIs = require('./URIs');
 
 // get songs
 router.get('/', async (req, res) => {
-    const reqLimit = req.query.limit;
-    const limit = (reqLimit !== undefined && reqLimit.match(/^\d+$/)) ? reqLimit : undefined;
+    const reqMin = Number(req.query.min);
+    const reqMax = Number(req.query.max);
+
+    const min = (isNaN(reqMin)) ? undefined : reqMin;
+    const max = (isNaN(reqMax)) ? undefined : reqMax;
 
     const reqSearch = req.query.search;
     const search = (reqSearch === undefined || reqSearch.length === 0) ? undefined : String(reqSearch);
 
     try {
-        let songs = await getSongs(search, limit);
+        let songs = await getSongs(search, min, max);
 
         res.json({ success: true, queryCount: songs.length, songs: songs });
     } catch (err) {
