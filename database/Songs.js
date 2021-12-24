@@ -5,7 +5,7 @@ const songs_schema = new Schema({
 	id: {
 		type: String,
 		unique: true,
-		required: true,
+		required: false,
 	},
 	artist: {
 		type: String,
@@ -49,13 +49,8 @@ const songs_schema = new Schema({
     trackPreviewUrl: {
         type: String
     },
-    year: {
-        type: String,
-        required: true
-    },
+}, {_id: false})
 
-})
-
-const songs = mongoose.model('Songs', songs_schema);
+const songs = mongoose.model(String(new Date().getFullYear()), songs_schema);
 
 module.exports = songs;

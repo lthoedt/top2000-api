@@ -9,7 +9,7 @@ const url = require('./config').mongoURI;
 
 const db = mongoose.connection;
 const Users = mongoose.model('Users');
-const Songs = mongoose.model('Songs');
+const Songs = mongoose.model(String(new Date().getFullYear()));
 
 const createDatabase = async () => {
 	await mongoose.connect(url, {
