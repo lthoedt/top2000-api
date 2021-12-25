@@ -58,6 +58,17 @@ const getSongs = async (search = "", min = 0, max = 2000) => {
     let query = [];
 
     if (isNaN(searchNumber)) {
+        if (search.startsWith(">")) {
+            search = search.replace(">", "");
+            const number = Number(search);
+            if (!isNaN(number)) {
+                query.push({
+                    position: {
+                        $gte: number
+                    }
+                });
+            }
+        }
         query.push({ title: { $regex: `.*${search}.*`, $options: 'i' } },
             { artist: { $regex: `.*${search}.*`, $options: 'i' } });
     } else {
